@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Photo } from '../../../../api/types';
 import styles from './index.module.sass';
 import Image from '../Image';
-import AddPhoto from '../AddPhoto';
+import AddPhoto from '../../containers/AddPhoto';
 
 interface BannerProps {
     photos: Photo[],
@@ -94,7 +94,7 @@ const Banner1: React.FC<BannerProps> = props => {
                     {
                         current !== photos.length
                             ? <Image onClick={() => setMidTextVisible(!midTextVisible)} showText={midTextVisible} photo={photos[current]} />
-                            : <AddPhoto bgUrl={lastPhoto} />
+                            : <AddPhoto  bgUrl={lastPhoto} />
                     }
                 </section>
                 <section>
