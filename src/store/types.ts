@@ -1,0 +1,25 @@
+export enum ACTION_TYPES {
+    GET_USER = 0xA00001,
+
+    GET_PHOTOS,
+    SLIDE_LEFT,
+    SLIDE_RIGHT,
+    SLIDE_TO,
+
+    START_UPLOAD,
+    PROGRESS_UPLOAD,
+    END_UPLOAD,
+    INIT_UPLOAD,
+
+    SET_LOADING,
+    TOGGLE_LOADING,
+
+    SET_LOGINBOX,
+
+    SHOW_TOAST,
+    HIDE_TOAST
+}
+
+export interface PURE_ACTION {
+    type: ACTION_TYPES
+}

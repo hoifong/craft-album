@@ -1,42 +1,52 @@
-import { Reducer, Action, ActionCreator } from "redux";
+import { Reducer, ActionCreator } from "redux";
+import { ACTION_TYPES } from "./types";
+import { getUser } from "../api";
+import { showLoading, hideLoading } from "./loading";
+import { initUploader } from "./uploader";
 
-export interface User {
+export interface UserState {
     username: string
     createdAt: Date
 }
 
 interface ActionType {
-    type: TYPES
-    user: User
+    type: ACTION_TYPES
+    user: UserState
 }
 
-const initValue: User = {
+const initValue: UserState = {
     username: '',
     createdAt: new Date()
-}
-
-/**
- * types
- */
-export enum TYPES {
-    SET_USER
 }
 
 /**
  * actions
  */
 
-export const setUser: ActionCreator<ActionType> = (user: User) => ({
-    type: TYPES.SET_USER,
+export const setUser: ActionCreator<ActionType> = (user: UserState) => ({
+    type: ACTION_TYPES.GET_USER,
     user
 });
+
+export const fetchUser = () => (dispatch: Function) => {
+    dispatch(showLoading());
+    getUser()
+        .then(({data}) => {
+            dispatch(setUser(data.data));
+            dispatch(initUploader());
+        })
+        .catch(() => {})
+        .finally(() => {
+            dispatch(hideLoading());
+        });
+} 
 
 /**
  * reducers
  */
-export const userReducer: Reducer<User, ActionType> = (user = initValue, action) => {
+export const userReducer: Reducer<UserState, ActionType> = (user = initValue, action) => {
     switch(action.type) {
-        case TYPES.SET_USER:
+        case ACTION_TYPES.GET_USER:
             return action.user;
         default:
             return user;

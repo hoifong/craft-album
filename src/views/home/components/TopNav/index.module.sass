@@ -1,13 +1,52 @@
+$topHeight: 60px
+
 .topNav
     position: absolute
     left: 0
     top: 0
     width: 100%
-    height: 60px
-    background: white
+    height: $topHeight
+    background: rgba(255, 255, 255, 0.4)
     opacity: 0
     z-index: 1001
     transition: opacity 1s linear
     
+    @media screen and ( max-width: 800px )
+        opacity: 0.7
+
     &:hover
-        opacity: 0.5
+        opacity: 0.7
+
+.topLeft
+    height: $topHeight
+    line-height: $topHeight
+    width: 400px
+    text-align: center
+    float: left
+    font-weight: 700
+    font-size: 24px
+    color: #222222
+
+    @media screen and ( max-width: 800px )
+        width: 50%
+
+.topRight
+    height: $topHeight
+    line-height: $topHeight
+    width: 400px
+    text-align: center
+    float: right
+    font-weight: 500
+    font-size: 24px
+    color: white
+    letter-spacing: 5px
+    
+    @media screen and ( max-width: 800px )
+        width: 50%
+    
+    img
+        max-height: 100%
+        vertical-align: middle
+
+        &:hover
+            cursor: pointer

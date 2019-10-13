@@ -1,0 +1,69 @@
+.loginPage
+    position: fixed
+    width: 100vw
+    height: 100vh
+    display: flex
+    align-items: center
+    justify-content: center
+    z-index: 3000
+
+.loginBox
+    background-color: rgba(255, 255, 255, 0.9)
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5)
+    width: 450px
+    border-radius: 5px
+
+.loginForm
+    display: flex
+    flex-flow: column nowrap
+    padding: 30px
+
+    input
+        background: none
+        outline: none
+        border: none
+        border-bottom: 1px solid
+        border-color: #aaaaaa
+        font-size: 25px
+        padding: 8px
+        letter-spacing: 5px
+        font-weight: 500
+
+    button
+        font-size: 20px
+        padding: 8px
+        letter-spacing: 3px
+        font-weight: 600
+        color: white
+        background-color: #ff9c00
+        border-radius: 10px
+        outline: none
+        border: none
+
+        &:disabled
+            background-color: #ff9d0098
+            &:hover
+                cursor: not-allowed
+        &:hover
+            cursor: pointer
+.thirdPartyLogin
+    font-size: 18px
+    margin: 0
+    color: #777777
+    height: 40px
+    padding: 10px 0
+    text-align: center
+    background-color: white
+
+    span
+        padding: 0 20px
+        height: 100%
+        line-height: 100%
+        text-align: center
+
+        *
+            height: 100%
+            vertical-align: middle
+
+.warning
+    color: rgb(255, 123, 0)

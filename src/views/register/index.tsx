@@ -8,10 +8,10 @@ const Register: React.FC = props => {
     const handleClick  = () => {
         register({ username, password })
             .then(() => {
-                console.log("注册成功");
+                alert("注册成功");
             })
             .catch(() => {
-                console.log("注册失败");
+                alert("注册失败");
             })
     }
 

@@ -1,25 +1,24 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Home from './views/home';
-import Login from './views/login';
 import './App.css';
-import Register from './views/register';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import logger from 'redux-logger';
+import thunk from 'redux-thunk';
 import Reducer from './store';
 import { Provider } from 'react-redux';
+import ControllerLoading from './containers/Loading';
+import Toast from './containers/Toast';
 
-const store = createStore(Reducer);
+const store = createStore(Reducer, applyMiddleware(thunk, logger));
 
 const App: React.FC = () => {
   return (
     <Provider store={store}>
-      <div className="App">
-        <Router>
-          <Route path='/' exact component={Home} />
-          <Route path='/login' component={Login} />
-          <Route path='/register' component={Register} />
-        </Router>
-      </div>
+        <div className="App">
+          <ControllerLoading />
+          <Toast />
+          <Home />
+        </div>
     </Provider>
   );
 }

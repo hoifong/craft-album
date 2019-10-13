@@ -1,46 +1,95 @@
-import React, { useState } from 'react';
-import Wrapper, { STATUS } from '../../components/AddPhoto';
+import React from 'react';
+import Displayer from '../../components/AddPhoto';
 import { upload, progressInfo } from '../../../../api/upload';
-import { ProviderProps, MapStateToProps, ConnectedComponent, connect } from 'react-redux';
+import { MapStateToProps, connect } from 'react-redux';
 import { StoreState } from '../../../../store';
+import { UPLOAD_STATUS, startUpload, progressUpload, failedUpload, completeUpload } from '../../../../store/uploader';
+import { fetchPhotos } from '../../../../store/banner';
+import { validateImageFile } from '../../../../utils/file';
+import { ToastState, toast } from '../../../../store/toast';
+import { showLoginbox } from '../../../../store/loginbox';
 
 type IProps = {
     bgUrl?: string
 }
 
-type mapStateToPropsType = {
+interface IMapStateToProps {
     username: string
+    status: UPLOAD_STATUS
+    percent: number
 }
 
-const AddPhoto: React.FC<mapStateToPropsType & IProps> = (props) => {
-    const [status, setStatus] = useState<STATUS>(STATUS.init);
-    const [percent, setPercent] = useState<number>(0);
-    const [error, setError] = useState<string>('');
-
-    function handleProgress(progress: progressInfo) {
-        console.log(progress.percent);
-    }
-
-    function handleError(e: any) {
-        console.log(e);
-    }
-
-    function handleComplete() {
-        console.log('上传成功');
-    }
-
-    const handleFileSelect = (file: Blob) => {
-        upload({
-            file,
-            username: props.username
-        }, handleProgress, handleError, handleComplete);
-    }
-
-    return <Wrapper onChange={handleFileSelect} status={status} percent={percent} error={error} />
+interface IMapDispatchToProps {
+    startUpload: () => void
+    progressUpload: (percent: number) => void
+    failedUpload: () => void
+    completeUpload: () => void
+    toast: (state: ToastState) => void
+    showLoginbox: () => void
 }
 
-const mapStateToProps: MapStateToProps<mapStateToPropsType, IProps, StoreState> = (state) => ({
-    username: state.user.username
+const mapStateToProps: MapStateToProps<IMapStateToProps, {}, StoreState> = state => ({
+    username: state.user.username,
+    status: state.uploader.status,
+    percent: state.uploader.percent
 });
 
-export default connect(mapStateToProps)(AddPhoto);
+const mapDispatchToProps = (dispatch: Function) => ({
+    startUpload: () => dispatch(startUpload()),
+    progressUpload: (percent: number) => dispatch(progressUpload(percent)),
+    failedUpload: () => dispatch(failedUpload()),
+    completeUpload: () => {
+        dispatch(completeUpload());
+        dispatch(toast({
+            type: 'success',
+            message: '上传成功'
+        }))
+        dispatch(fetchPhotos());
+    },
+    toast: (state: ToastState) => dispatch(toast(state)),
+    showLoginbox: () => dispatch(showLoginbox())
+});
+
+const Wrapper: React.FC<IMapStateToProps & IMapDispatchToProps & IProps> = props => {
+    const {
+        bgUrl,
+        username,
+        status,
+        percent,
+        startUpload,
+        progressUpload,
+        failedUpload,
+        completeUpload,
+        toast,
+        showLoginbox
+    } = props;
+
+    function handleProgress(progress: progressInfo) {
+        progressUpload(Math.floor(progress.percent));
+    }
+
+    const handleFileSelect = (file: File) => {
+        if (file && validateImageFile(file)) {
+            startUpload();
+            upload({
+                file,
+                username: username
+            }, handleProgress, failedUpload, completeUpload);
+        } else {
+            toast({
+                type: 'error',
+                message: '文件格式错误'
+            });
+        }
+    }
+
+    const handleUnlogClick = () => {
+        if (status === UPLOAD_STATUS.UNLOG) {
+            showLoginbox();
+        }
+    }
+
+    return <Displayer bgUrl={bgUrl} status={status} percent={percent} onChange={handleFileSelect} onClick={handleUnlogClick} />
+}
+
+export default connect<IMapStateToProps, IMapDispatchToProps, IProps, any>(mapStateToProps, mapDispatchToProps)(Wrapper);

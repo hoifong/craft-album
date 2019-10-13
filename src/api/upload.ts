@@ -1,11 +1,10 @@
 import { upload as apiUpload } from 'qiniu-js';
-import uuid from 'short-uuid';
 import { getToken } from '.';
 import { AxiosResponse } from 'axios';
-import { responseData } from './types';
+import { responseData, returnForAddPhoto } from './types';
 
 export interface uploadParam {
-    file: Blob,
+    file: File,
     username: string
 }
 
@@ -22,17 +21,15 @@ export const upload: (
     onComplete: (res: qiniu.CompletedResult) => void
     ) => void = (param, onProgress, onError, onComplete) => {
 
-    const photoid = uuid(param.username).generate();
-
     //  返回unsubscribe函数
 
     getToken()
-        .then((res: AxiosResponse<responseData<string>>) => {
-            const token = res.data.data;
+        .then((res: AxiosResponse<responseData<returnForAddPhoto>>) => {
+            const { token, id } = res.data.data;
 
             apiUpload(
                 param.file,
-                photoid,
+                id,
                 token,
                 {
                     //  putExtra

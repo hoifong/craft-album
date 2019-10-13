@@ -30,7 +30,7 @@ const Progress: React.FC<ProgressProps> = props => {
         setOffset(initOffset);
     }
 
-    useEffect(setSlider, [current]);
+    useEffect(setSlider, [current, total]);
 
     //  点击进度条
     const handleChange = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -56,7 +56,7 @@ const Progress: React.FC<ProgressProps> = props => {
         if (!barRef.current || e.clientX <= 0) {
             return;
         }
-        const offset = e.screenX - barRef.current.offsetLeft;
+        const offset = e.clientX - barRef.current.offsetLeft;
         setOffset(offset+'px');
     }
 

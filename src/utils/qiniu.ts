@@ -44,4 +44,3 @@ export function createToken() {
     const encodeSign = Base64.encode(sign+'', true);
     return QINIU_CONFIG.AccessKey + ':' + encodeSign + ':' + encodePutPolicy;
 }
-

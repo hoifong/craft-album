@@ -3,6 +3,7 @@ import { Photo } from '../../../../api/types';
 import styles from './index.module.sass';
 import Image from '../Image';
 import AddPhoto from '../../containers/AddPhoto';
+import { BANNER_SLIDE_SPEED } from '../../../../utils/consts';
 
 interface BannerProps {
     photos: Photo[],
@@ -26,7 +27,7 @@ const Banner1: React.FC<BannerProps> = props => {
 
         const move = () => {
 
-            needOffset -= 2;
+            needOffset -= BANNER_SLIDE_SPEED;
             setOffset(needOffset);
 
             if (needOffset > 0) {
@@ -51,7 +52,7 @@ const Banner1: React.FC<BannerProps> = props => {
 
         const move = () => {
 
-            needOffset += 2;
+            needOffset += BANNER_SLIDE_SPEED;
             setOffset(needOffset);
 
             if (needOffset < 200) {
@@ -82,7 +83,7 @@ const Banner1: React.FC<BannerProps> = props => {
 
     useEffect(handleShowIndexChange, [showIndex]);
 
-    const lastPhoto = photos.length ? photos[photos.length-1].originUrl : '';
+    const lastPhoto = photos.length ? photos[photos.length-1].photoId : '';
 
     return (
         <div className={styles.banner}>
