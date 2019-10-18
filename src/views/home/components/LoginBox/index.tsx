@@ -43,7 +43,7 @@ const LoginBox: React.FC<IProps> = props => {
         setPassword(e.target.value);
     };
 
-    const handleClick = () => {
+    const submit = () => {
         onSubmit && onSubmit({
             username, password
         });
@@ -56,14 +56,14 @@ const LoginBox: React.FC<IProps> = props => {
     const disabled = status === 'init' || status === 'loading' || !password || !username;
 
     return (
-        <div className={styles.loginPage} onClick={onQuit}>
+        <div className={styles.loginPage} onClick={onQuit} onKeyDown={e => e.keyCode===13&&!disabled&&submit()}>
             <div className={styles.loginBox} onClick={e => e.stopPropagation()}>
                 <div className={styles.loginForm}>
                     <input placeholder='用户名' type='text' value={username} onBlur={handleUsernameBlur} onChange={handleUsernameChange} />
                     <p className={styles.warning}>{tip[status]}</p>
                     <input placeholder='密码' type='password' value={password} onChange={handlePasswordChange} />
                     <p className={styles.warning}>{error}</p>
-                    <button disabled={disabled} onClick={handleClick}>{ buttonContent[status] }</button>
+                    <button disabled={disabled} onClick={submit}>{ buttonContent[status] }</button>
                 </div>
                 <p className={styles.thirdPartyLogin}>
                     <span>第三方登录</span>

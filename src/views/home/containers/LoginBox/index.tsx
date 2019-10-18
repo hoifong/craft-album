@@ -63,20 +63,27 @@ const Wrapper: React.FC<IMapStateToProps & IMapDispatchToProps> = props => {
         }
 
         if (handler) {
+            const lastStatus = status;
             setStatus('loading');
             handler.then(() => {
+                setError('');
                 fetchUser();
                 fetchPhotos();
-                hideLoginbox();
+                quitLoginBox();
             }).catch(e => {
                 setError(e.message || e);
-            }).finally(() => {
-                setStatus('init');
-            })
+                setStatus(lastStatus);
+            });
         }
     }
 
-    return show ? <Displayer status={status} error={error} onNeedCheckUsername={checkUsername} onSubmit={handleSubmit} onQuit={hideLoginbox} /> : null;
+    const quitLoginBox = () => {
+        hideLoginbox();
+        setError('');
+        setStatus('init');
+    }
+
+    return show ? <Displayer status={status} error={error} onNeedCheckUsername={checkUsername} onSubmit={handleSubmit} onQuit={quitLoginBox} /> : null;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wrapper);
