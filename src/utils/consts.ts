@@ -11,3 +11,5 @@ export const APIS = {
 }
 
 export const BANNER_SLIDE_SPEED = 3;
+
+export const QINIU_DOMAIN = 'pyfenxfkd.bkt.clouddn.com';

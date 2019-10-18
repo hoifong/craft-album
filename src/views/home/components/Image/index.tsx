@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 import { Photo } from '../../../../api/types';
 import styles from './index.module.sass';
-import { QINIU_CONFIG } from '../../../../utils/qiniu';
+import { QINIU_DOMAIN } from '../../../../utils/consts';
 
 interface ImageProps {
     photo: Photo
@@ -61,7 +61,7 @@ const Image: React.FC<ImageProps> = props => {
         }
     };
 
-    const src = 'http://' + QINIU_CONFIG.Domain + '/' + photo.photoId;
+    const src = 'http://' + QINIU_DOMAIN + '/' + photo.photoId;
 
     return (
         <div className={styles.container} onClick={handleClick}>
