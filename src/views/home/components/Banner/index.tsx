@@ -1,46 +1,85 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { Photo } from '../../../../api/types';
 import styles from './index.module.sass';
 import Image from '../Image';
 import AddPhoto from '../../containers/AddPhoto';
-import { BANNER_SLIDE_SPEED } from '../../../../utils/consts';
+import cn from 'classnames';
+// import { BANNER_SLIDE_SPEED } from '../../../../utils/consts';
 
 interface BannerProps {
     photos: Photo[],
     showIndex: number
 }
 
+interface BannerState {
+    current: number,
+    move: 'left'|'right'|'',
+    textVisible: boolean,
+    left: number,
+    right: number
+}
+
+const initialState: (current: number) => BannerState = current => ({
+    current: current,
+    left: -1,//-1代表左边图片为左侧相邻的图片，否则为指定idx的图片
+    right: -1,
+    move: '',
+    textVisible: false
+});
+
+const BannerReducer: React.Reducer<BannerState, any> = (state, action) => {
+    switch(action.type) {
+        case 'moveLeft': 
+            return {
+                ...state,
+                move: 'left'
+            };
+        case 'moveRight':
+            return {
+                ...state,
+                move: 'right'
+            };
+        case 'setCurrent':
+            return initialState(action.current);
+        case 'setLeft':
+            return {
+                ...state,
+                left: action.left
+            };
+        case 'setRight':
+            return {
+                ...state,
+                right: action.right
+            };
+        case 'toggleTextVisible':
+            return {
+                ...state,
+                textVisible: !state.textVisible
+            }
+        default:
+            return state;
+    }
+}
+
 const Banner1: React.FC<BannerProps> = props => {
     const { showIndex, photos } = props;
-    const [current, setCurrent] = useState(showIndex);
-    const [offset, setOffset] = useState(100);
-    const [midTextVisible, setMidTextVisible] = useState(false);
-    const [leftPhoto, setLeft] = useState(-1);
-    const [rightPhoto, setRight] = useState(-1);
-
+    const [state, dispatch] = useReducer<React.Reducer<BannerState, any>, number>(BannerReducer, showIndex, initialState);
+    //const [offset, setOffset] = useState(100);
+    const { current, left, right, textVisible, move } = state;
+ 
     const slideLeft = () => {
         if (current <= 0) {
             return;
         }
 
-        let needOffset = 100;
-
-        const move = () => {
-
-            needOffset -= BANNER_SLIDE_SPEED;
-            setOffset(needOffset);
-
-            if (needOffset > 0) {
-                requestAnimationFrame(move);
-            } else {
-                setMidTextVisible(false);
-                setCurrent(showIndex);
-                setLeft(-1);
-                setOffset(100);
-            }
-        }
-
-        requestAnimationFrame(move);
+        dispatch({ type: 'moveLeft' });
+        setTimeout(() => {
+            //  动画完成后重置状态
+            dispatch({
+                type: 'setCurrent',
+                current: showIndex
+            })
+        }, 1200);   //滑动时间
     }
 
     const slideRight = () => {
@@ -48,24 +87,14 @@ const Banner1: React.FC<BannerProps> = props => {
             return;
         }
 
-        let needOffset = 100;
+        dispatch({ type: 'moveRight' });
+        setTimeout(() => {
+            dispatch({
+                type: 'setCurrent',
+                current: showIndex
+            })
+        }, 1200);
 
-        const move = () => {
-
-            needOffset += BANNER_SLIDE_SPEED;
-            setOffset(needOffset);
-
-            if (needOffset < 200) {
-                requestAnimationFrame(move);
-            } else {
-                setMidTextVisible(false);
-                setCurrent(showIndex);
-                setRight(-1);
-                setOffset(100);
-            }
-        }
-
-        requestAnimationFrame(move);
     }
 
     const handleShowIndexChange = () => {
@@ -73,10 +102,16 @@ const Banner1: React.FC<BannerProps> = props => {
             return;
         }
         if (showIndex < current) {
-            setLeft(showIndex);
+            dispatch({
+                type: 'setLeft',
+                left: showIndex
+            })
             slideLeft();
         } else {
-            setRight(showIndex);
+            dispatch({
+                type: 'setRight',
+                right: showIndex
+            });
             slideRight();
         }
     }
@@ -85,29 +120,31 @@ const Banner1: React.FC<BannerProps> = props => {
 
     const lastPhoto = photos.length ? photos[photos.length-1].photoId : '';
 
+    const containerStyle = cn([styles.content, {
+        [styles.slideLeft]: move === 'left',
+        [styles.slideRight]: move === 'right'
+    }])
+
     return (
         <div className={styles.banner}>
-            <div className={styles.content} style={{left: `-${offset}%`}}>
+            <div className={containerStyle}>
                 <section>
-                    { current > 0 && <Image showText={false} photo={photos[leftPhoto !== -1 ? leftPhoto : (current - 1)]} /> }
+                    { current > 0 && <Image showText={false} photo={photos[left !== -1 ? left : (current - 1)]} /> }
                 </section>
                 <section>
                     {
                         current !== photos.length
-                            ? <Image onClick={() => setMidTextVisible(!midTextVisible)} showText={midTextVisible} photo={photos[current]} />
+                            ? <Image onClick={() => dispatch({type: 'toggleTextVisible'})} showText={textVisible} photo={photos[current]} />
                             : <AddPhoto  bgUrl={lastPhoto} />
                     }
                 </section>
                 <section>
                     {
-                        rightPhoto === photos.length || current === photos.length - 1
+                        right === photos.length || current === photos.length - 1
                             ? <AddPhoto bgUrl={lastPhoto} />
                             : current < photos.length - 1
-                                ? <Image showText={false} photo={photos[rightPhoto !== -1 ? rightPhoto : (current + 1)]} />
+                                ? <Image showText={false} photo={photos[right !== -1 ? right : (current + 1)]} />
                                 : null
-                        // current + 1 < photos.length || rightPhoto !== photos.length
-                        // ? <Image showText={textVisible} photo={photos[rightPhoto !== -1 ? rightPhoto : (current + 1)]} /> 
-                        // : ((current === photos.length - 1) && <AddPhoto />)
                     }
                 </section>
             </div>

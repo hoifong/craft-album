@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import styles from './index.module.sass';
-import TopNav from './containers/TopNav';
 import Banner from './containers/Banner';
-import Progress from './containers/Progress';
-import LeftArrow from './containers/LeftArrow';
-import RightArrow from './containers/RightArrow';
-import LoginBox from './containers/LoginBox';
-import Trash from './containers/Trash';
+import {
+    LoginBox,
+    TopNav,
+    LeftArrow,
+    RightArrow,
+    Progress,
+    Trash
+} from './lazyLoad';
 import { connect } from 'react-redux';
 import { fetchPhotos } from '../../store/banner';
 import { fetchUser } from '../../store/user';
@@ -23,8 +25,6 @@ const mapDispatchToProps= (dispatch: Function) => ({
 })
 
 const Home: React.FC<IProps> = props => {
-
-    
 
     useEffect(props.fetchData, []);
 
