@@ -19,11 +19,18 @@
     width: auto
     white-space: nowrap
     transform:  translateX(-100%)
+    transition: transform 1.2s ease-in-out
+    
+
 
 .slideLeft
     animation: slideLeft 1.2s ease-in-out forwards
+    // transform:  translateX(0%)
+    // transition: transform 1.2s ease-in-out
 .slideRight
     animation: slideRight 1.2s ease-in-out forwards
+    // transform:  translateX(-200%)
+    // transition: transform 1.2s ease-in-out
 
 @keyframes slideLeft
     0%

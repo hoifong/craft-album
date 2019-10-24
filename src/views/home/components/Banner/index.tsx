@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { Photo } from '../../../../api/types';
 import styles from './index.module.sass';
 import Image from '../Image';
@@ -63,10 +63,10 @@ const BannerReducer: React.Reducer<BannerState, any> = (state, action) => {
 
 const Banner1: React.FC<BannerProps> = props => {
     const { showIndex, photos } = props;
-    const [state, dispatch] = useReducer<React.Reducer<BannerState, any>, number>(BannerReducer, showIndex, initialState);
-    //const [offset, setOffset] = useState(100);
+    const [ state, dispatch ] = useReducer<React.Reducer<BannerState, any>, number>(BannerReducer, showIndex, initialState);
+    const [ nextShowIndex, setNextShowIndex] = useState(-1);
     const { current, left, right, textVisible, move } = state;
- 
+
     const slideLeft = () => {
         if (current <= 0) {
             return;
@@ -78,7 +78,7 @@ const Banner1: React.FC<BannerProps> = props => {
             dispatch({
                 type: 'setCurrent',
                 current: showIndex
-            })
+            });
         }, 1200);   //滑动时间
     }
 
@@ -92,12 +92,12 @@ const Banner1: React.FC<BannerProps> = props => {
             dispatch({
                 type: 'setCurrent',
                 current: showIndex
-            })
+            });
         }, 1200);
 
     }
 
-    const handleShowIndexChange = () => {
+    const handleCurrent = () => {
         if (showIndex === current) {
             return;
         }
@@ -116,7 +116,24 @@ const Banner1: React.FC<BannerProps> = props => {
         }
     }
 
+    const handleNext = () => {
+        //  上一动画结束时开始下一动画
+        if (nextShowIndex !== -1 && !move) {
+            setNextShowIndex(-1);
+            handleShowIndexChange();
+        }
+    }
+
+    const handleShowIndexChange = () => {
+        if (!state.move) {
+            handleCurrent();
+        } else {
+            setNextShowIndex(showIndex);
+        }
+    }
+
     useEffect(handleShowIndexChange, [showIndex]);
+    useEffect(handleNext, [move]);
 
     const lastPhoto = photos.length ? photos[photos.length-1].photoId : '';
 
