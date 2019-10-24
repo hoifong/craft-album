@@ -1,5 +1,5 @@
 import { Reducer, ActionCreator } from 'redux';
-import { ACTION_TYPES } from './types';
+import { ACTION_TYPES, BaseAction } from './types';
 
 export enum UPLOAD_STATUS {
     UNLOG, INIT, UPLOADING, FAILED, COMPLETE
@@ -10,8 +10,7 @@ export interface UploaderState {
     status: UPLOAD_STATUS
 }
 
-interface ActionType {
-    type: ACTION_TYPES
+interface ActionType extends BaseAction {
     state: UploaderState
 }
 

@@ -1,10 +1,9 @@
-import { ACTION_TYPES } from "./types";
+import { ACTION_TYPES, BaseAction } from "./types";
 import { ActionCreator, Reducer } from "redux";
 
 export type LoginboxState = boolean;
 
-interface ActionType {
-    type: ACTION_TYPES,
+interface ActionType extends BaseAction {
     show: boolean
 }
 

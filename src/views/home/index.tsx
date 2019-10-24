@@ -12,24 +12,31 @@ import {
 import { connect } from 'react-redux';
 import { fetchPhotos } from '../../store/banner';
 import { fetchUser } from '../../store/user';
+import { showControllerInTime } from '../../store/controller';
 
 interface IProps {
-    fetchData: () => void
+    fetchData: () => void,
+    showController: () => void
 }
 
 const mapDispatchToProps= (dispatch: Function) => ({
     fetchData: () => {
         dispatch(fetchUser());
         dispatch(fetchPhotos());
+    },
+    showController: () => {
+        dispatch(showControllerInTime());
     }
 })
 
 const Home: React.FC<IProps> = props => {
 
-    useEffect(props.fetchData, []);
+    const { fetchData, showController } = props;
+
+    useEffect(fetchData, []);
 
     return (
-        <div className={styles.home}>
+        <div className={styles.home} onMouseMove={showController}>
             <LoginBox/>
             <TopNav />
             <LeftArrow />

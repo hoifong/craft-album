@@ -10,6 +10,7 @@ import { deletePhoto } from '../../../../api';
 interface IMapStateToProps {
     current: number
     photos: Photo[]
+    visible: boolean
 }
 
 interface IMapDispatchToProps {
@@ -19,7 +20,8 @@ interface IMapDispatchToProps {
 
 const mapStateToProps = (state: StoreState) => ({
     current: state.banner.showIndex,
-    photos: state.banner.photos
+    photos: state.banner.photos,
+    visible: state.controller.trash
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -28,7 +30,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 })
 
 const Wrapper: React.FC<IMapStateToProps & IMapDispatchToProps> = props => {
-    const { current, photos, toggleLoading, fetchPhotos } = props;
+    const { current, photos, toggleLoading, fetchPhotos, visible } = props;
 
     const handleClick = () => {
         toggleLoading();
@@ -45,7 +47,7 @@ const Wrapper: React.FC<IMapStateToProps & IMapDispatchToProps> = props => {
             });
     }
 
-    return current < photos.length ? <Displayer onClick={handleClick} /> : null;
+    return current < photos.length ? <Displayer hide={!visible} onClick={handleClick} /> : null;
 }
 
 export default connect<IMapStateToProps, IMapDispatchToProps, any, any>(mapStateToProps, mapDispatchToProps)(Wrapper);

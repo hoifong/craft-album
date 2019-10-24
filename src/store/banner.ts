@@ -1,7 +1,7 @@
 import { ActionCreator, Reducer } from 'redux';
 import { getPhotos as apiGetPhotos } from '../api';
 import { Photo } from '../api/types';
-import { ACTION_TYPES } from './types';
+import { ACTION_TYPES, BaseAction } from './types';
 import { ThunkAction } from 'redux-thunk';
 import { initUploader } from './uploader';
 import { showLoading, hideLoading } from './loading';
@@ -11,8 +11,7 @@ export interface BannerState {
     showIndex: number
 }
 
-interface ActionType {
-    type: ACTION_TYPES,
+interface ActionType extends BaseAction {
     photos?: Photo[],
     showIndex?: number
 }

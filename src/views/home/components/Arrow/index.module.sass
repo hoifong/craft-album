@@ -11,6 +11,7 @@ $arrow-size: 30px
     transform: translateY(-50%)
     width: 68px
     height: 112px
+    transition: all .8s ease-in-out
 
     @media screen and ( max-width: 600px )
         width: 48px
@@ -36,3 +37,13 @@ $arrow-size: 30px
 
     @media screen and ( max-width: 600px )
         right: 10px
+
+.leftHide
+    left: 0px
+    opacity: 0
+    z-index: -1
+
+.rightHide
+    right: 0px
+    opacity: 0
+    z-index: -1

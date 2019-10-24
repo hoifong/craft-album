@@ -5,7 +5,8 @@ import { StoreState } from '../../../../store';
 import { slideLeft } from '../../../../store/banner';
 
 interface IMapStateToProps {
-    current: number
+    current: number,
+    visible: boolean
 }
 
 interface IMapDispatchToProps {
@@ -13,7 +14,8 @@ interface IMapDispatchToProps {
 }
 
 const mapStateToProps: MapStateToProps<IMapStateToProps, {}, StoreState> = state => ({
-    current: state.banner.showIndex
+    current: state.banner.showIndex,
+    visible: state.controller.arrow
 });
 
 const mapDispatchToProps: MapDispatchToProps<IMapDispatchToProps, {}> = dispatch => ({
@@ -21,8 +23,8 @@ const mapDispatchToProps: MapDispatchToProps<IMapDispatchToProps, {}> = dispatch
 });
 
 const Wrapper: React.FC<IMapStateToProps & IMapDispatchToProps> = props => {
-    const { current, slideLeft } = props;
-    return current > 0 ? <Displayer direct='left' onClick={slideLeft} /> : null;
+    const { current, slideLeft, visible } = props;
+    return current > 0 ? <Displayer direct='left' hide={!visible} onClick={slideLeft} /> : null;
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wrapper);

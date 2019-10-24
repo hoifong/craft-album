@@ -1,3 +1,5 @@
+import { Action } from "redux";
+
 export enum ACTION_TYPES {
     GET_USER = 0xA00001,
 
@@ -17,9 +19,13 @@ export enum ACTION_TYPES {
     SET_LOGINBOX,
 
     SHOW_TOAST,
-    HIDE_TOAST
+    HIDE_TOAST,
+
+    SET_CONTROLLER_VISIBLE
 }
 
 export interface PURE_ACTION {
     type: ACTION_TYPES
 }
+
+export type BaseAction = Action<ACTION_TYPES>;

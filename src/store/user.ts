@@ -1,5 +1,5 @@
 import { Reducer, ActionCreator } from "redux";
-import { ACTION_TYPES } from "./types";
+import { ACTION_TYPES, BaseAction } from "./types";
 import { getUser } from "../api";
 import { showLoading, hideLoading } from "./loading";
 import { initUploader } from "./uploader";
@@ -9,8 +9,7 @@ export interface UserState {
     createdAt: Date
 }
 
-interface ActionType {
-    type: ACTION_TYPES
+interface ActionType extends BaseAction {
     user: UserState
 }
 

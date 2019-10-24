@@ -1,17 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
+import cn from 'classnames';
 import styles from './index.module.sass';
 
 interface ProgressProps {
     total: number,
     current: number,    //  1-total
     onChange?: (index: number) => void
+    hide?: boolean
 }
 
 const errorRange = 0.5;
 
 const Progress: React.FC<ProgressProps> = props => {
 
-    const {current, total, onChange} = props;
+    const {current, total, onChange, hide} = props;
 
     const sliderRef = useRef<HTMLDivElement>(null);
     const barRef = useRef<HTMLDivElement>(null);
@@ -78,7 +80,7 @@ const Progress: React.FC<ProgressProps> = props => {
     }
 
     return (
-        <div className={styles.progress}>
+        <div className={cn([styles.progress, hide&&styles.progressHide])}>
             <div className={styles.bar} ref={barRef} onClick={handleChange}>
                 <div
                     className={styles.slider}

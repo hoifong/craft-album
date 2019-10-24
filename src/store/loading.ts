@@ -1,10 +1,9 @@
 import { Reducer, ActionCreator } from "redux";
-import { ACTION_TYPES, PURE_ACTION } from "./types";
+import { ACTION_TYPES, BaseAction } from "./types";
 
 export type LoadingState = boolean;
 
-interface ActionType {
-    type: ACTION_TYPES
+interface ActionType extends BaseAction {
     show: boolean
 }
 
@@ -16,7 +15,7 @@ export const hideLoading: ActionCreator<ActionType> = () => ({
     type: ACTION_TYPES.SET_LOADING,
     show: false
 });
-export const toggleLoading: ActionCreator<PURE_ACTION> = () => ({
+export const toggleLoading: ActionCreator<BaseAction> = () => ({
     type: ACTION_TYPES.TOGGLE_LOADING
 });
 

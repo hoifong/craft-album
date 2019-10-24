@@ -6,7 +6,8 @@ import { slideTo } from '../../../../store/banner';
 
 interface IMapStateToProps {
     total: number,
-    current: number
+    current: number,
+    visible: boolean
 }
 
 interface IMapDispatchToProps {
@@ -15,7 +16,8 @@ interface IMapDispatchToProps {
 
 const mapStateToProps: MapStateToProps<IMapStateToProps, {}, StoreState> = state => ({
     total: state.banner.photos.length,
-    current: state.banner.showIndex
+    current: state.banner.showIndex,
+    visible: state.controller.progress
 });
 
 const mapDispatchToProps: MapDispatchToProps<IMapDispatchToProps, {}> = dispatch => ({
@@ -23,9 +25,9 @@ const mapDispatchToProps: MapDispatchToProps<IMapDispatchToProps, {}> = dispatch
 });
 
 const Wrapper: React.FC<IMapStateToProps & IMapDispatchToProps> = props => {
-    const { total, current, slideTo } = props;
+    const { total, current, slideTo, visible } = props;
 
-    return total > 0 ? <Displayer total={total} current={current} onChange={slideTo} /> : null;
+    return total > 0 ? <Displayer total={total} hide={!visible} current={current} onChange={slideTo} /> : null;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wrapper);

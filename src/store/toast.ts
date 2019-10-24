@@ -1,6 +1,7 @@
-import { ACTION_TYPES, PURE_ACTION } from "./types";
+import { ACTION_TYPES, BaseAction } from "./types";
 import { ActionCreator, Reducer } from "redux";
 import { StoreState } from ".";
+import { HIDE_TOAST_IN_SECONDS } from "../utils/consts";
 
 export type ToastType = 'error' | 'success' | 'warning' | 'loading';
 
@@ -16,8 +17,7 @@ const initValue: ToastState = {
     visible: false
 }
 
-interface ActionType {
-    type: ACTION_TYPES
+interface ActionType extends BaseAction {
     state: ToastState
 }
 
@@ -42,7 +42,7 @@ export const showToastIn = (state: ToastState, seconds: number) => (dispatch: Fu
 export const toast = (state: ToastState) => (dispatch: Function, getState: () => StoreState) => {
     const { visible } = getState().toast;
     if (!visible) {
-        return dispatch(showToastIn(state, 2));
+        return dispatch(showToastIn(state, HIDE_TOAST_IN_SECONDS));
     }
     dispatch(hideToast());
     if (toastTask) {
@@ -51,12 +51,12 @@ export const toast = (state: ToastState) => (dispatch: Function, getState: () =>
         toastTask = null;
     }
     toastTask = setTimeout(() => {
-        dispatch(showToastIn(state, 2));
+        dispatch(showToastIn(state, HIDE_TOAST_IN_SECONDS));
     }, 1000);//1秒动画间隔
 }
 
 //  关闭toast
-export const hideToast: ActionCreator<PURE_ACTION> = () => ({
+export const hideToast: ActionCreator<BaseAction> = () => ({
     type: ACTION_TYPES.HIDE_TOAST
 });
 

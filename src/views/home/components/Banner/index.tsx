@@ -61,7 +61,7 @@ const BannerReducer: React.Reducer<BannerState, any> = (state, action) => {
     }
 }
 
-const Banner1: React.FC<BannerProps> = props => {
+const Banner: React.FC<BannerProps> = props => {
     const { showIndex, photos } = props;
     const [ state, dispatch ] = useReducer<React.Reducer<BannerState, any>, number>(BannerReducer, showIndex, initialState);
     const [ nextShowIndex, setNextShowIndex] = useState(-1);
@@ -170,4 +170,4 @@ const Banner1: React.FC<BannerProps> = props => {
     );
 }
 
-export default Banner1;
+export default Banner;

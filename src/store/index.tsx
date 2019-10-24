@@ -5,6 +5,7 @@ import { UploaderState, uploaderReducer } from './uploader';
 import { LoadingState, loadingReducer } from './loading';
 import { ToastState, toastReducer } from './toast';
 import { LoginboxState, LoginboxReducer } from './loginbox';
+import { ControllerState, ControllerReducer } from './controller';
 
 export interface StoreState {
     user: UserState
@@ -13,6 +14,7 @@ export interface StoreState {
     loading: LoadingState
     toast: ToastState
     loginbox: LoginboxState
+    controller: ControllerState
 }
 
 const rootReducer = combineReducers({
@@ -21,7 +23,8 @@ const rootReducer = combineReducers({
     uploader: uploaderReducer,
     loading: loadingReducer,
     toast: toastReducer,
-    loginbox: LoginboxReducer
+    loginbox: LoginboxReducer,
+    controller: ControllerReducer
 });
 
 export default rootReducer;
