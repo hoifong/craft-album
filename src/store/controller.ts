@@ -32,7 +32,6 @@ let timer: any = null;
 
 export const showControllerInTime: ActionCreator<ThunkAction<any, any, any, any>> = () => {
     return dispatch => {
-        console.log(timer);
         if (timer) {
             clearTimeout(timer);
             timer = setTimeout(() => {
