@@ -12,4 +12,4 @@
 
 ## 预览：
 
-![预览](./pic/album.gif)
+![image](./pic/album.gif)
