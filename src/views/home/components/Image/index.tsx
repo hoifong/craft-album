@@ -63,8 +63,6 @@ const Image: React.FC<ImageProps> = props => {
             if (editFocus) {
                 setEditFocus(false);
 
-                console.log(newText, photo.text);
-
                 newText !== photo.text && onTextEditComplete && onTextEditComplete({
                     photoId: photo.photoId,
                     text: newText
