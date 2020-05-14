@@ -1,3 +1,6 @@
+/**
+ * 组件：上传图片
+ */
 import React, { useRef } from 'react';
 import addImg from '../../../../assets/png/add.png';
 import styles from './index.module.sass';

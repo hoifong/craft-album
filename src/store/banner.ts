@@ -1,10 +1,11 @@
 import { ActionCreator, Reducer } from 'redux';
-import { getPhotos as apiGetPhotos } from '../api';
-import { Photo } from '../api/types';
+import * as Api from '../api';
+import { Photo, payloadForUpdateText } from '../api/types';
 import { ACTION_TYPES, BaseAction } from './types';
 import { ThunkAction } from 'redux-thunk';
 import { initUploader } from './uploader';
 import { showLoading, hideLoading } from './loading';
+import { toast } from './toast';
 
 export interface BannerState {
     photos: Photo[],
@@ -13,6 +14,7 @@ export interface BannerState {
 
 interface ActionType extends BaseAction {
     photos?: Photo[],
+    update?: Photo,
     showIndex?: number
 }
 
@@ -32,7 +34,7 @@ export const getPhotos: ActionCreator<ActionType> = (photos: Photo[]) => ({
 export const fetchPhotos: ActionCreator<ThunkAction<any, any, any, any>> = () => {
     return dispatch => {
         dispatch(showLoading())
-        apiGetPhotos()
+        Api.getPhotos()
             .then(({data}) => {
                 dispatch(getPhotos(data.data));
                 dispatch(initUploader());
@@ -42,6 +44,30 @@ export const fetchPhotos: ActionCreator<ThunkAction<any, any, any, any>> = () =>
                 dispatch(hideLoading());
             });
     };
+}
+
+export const updatePhotoText: ActionCreator<ThunkAction<any, any, any, any>> = (payload: payloadForUpdateText) => {
+    return dispatch => {
+        dispatch(showLoading())
+        Api.updatePhotoText(payload)
+            .then(() => {
+                dispatch(toast({
+                    type: 'success',
+                    message: '修改成功'
+                }));
+                dispatch({
+                    type: ACTION_TYPES.UPDATE_PHOTO,
+                    photo: payload
+                });
+            })
+            .catch(e => dispatch(toast({
+                type: 'error',
+                message: e
+            })))
+            .finally(() => {
+                dispatch(hideLoading());
+            });
+    }
 }
 
 export const slideLeft: ActionCreator<ActionType> = () => ({
@@ -69,6 +95,19 @@ export const bannerReducer: Reducer<BannerState, ActionType> = (state = initValu
                 showIndex,
                 photos: photos
             };
+        case ACTION_TYPES.UPDATE_PHOTO:
+            const photo = action.update;
+            if (!photo) break;
+            const idx = state.photos.findIndex(item => item.photoId === photo.photoId);
+            if (idx === -1) break;
+            return {
+                ...state,
+                photos: [
+                    ...state.photos.slice(0, idx),
+                    {...state.photos[idx], ...photo},
+                    ...state.photos.slice(idx+1, state.photos.length)
+                ]
+            };
         case ACTION_TYPES.SLIDE_LEFT:
             return {
                 ...state,
@@ -87,4 +126,5 @@ export const bannerReducer: Reducer<BannerState, ActionType> = (state = initValu
         default:
             return state;
     }
+    return state;
 }

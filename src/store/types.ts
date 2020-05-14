@@ -4,6 +4,7 @@ export enum ACTION_TYPES {
     GET_USER = 0xA00001,
 
     GET_PHOTOS,
+    UPDATE_PHOTO,
     SLIDE_LEFT,
     SLIDE_RIGHT,
     SLIDE_TO,

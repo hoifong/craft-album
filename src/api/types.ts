@@ -27,6 +27,11 @@ export interface payloadForDeletePhoto {
     photoId: string
 }
 
+export interface payloadForUpdateText {
+    photoId: string
+    text: string
+}
+
 export interface returnForLogin {
     username: string,
     createdAt: string,

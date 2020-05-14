@@ -5,6 +5,7 @@ export const APIS = {
     REGISTER: '/api/register',
     QINIU_TOKEN: '/api/qiniu-token',
     GET_PHOTOS: '/api/photos',
+    UPDATE_PHOTO_TEXT: '/api/updatePhotoText',
     DEL_PHOTO: '/api/delPhoto',
     GET_USER: '/api/user',
     CHECK_USERNAME: '/api/exist'

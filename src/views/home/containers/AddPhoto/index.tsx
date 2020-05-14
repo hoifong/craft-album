@@ -1,3 +1,6 @@
+/**
+ * 容器：上传图片
+ */
 import React from 'react';
 import Displayer from '../../components/AddPhoto';
 import { upload, progressInfo } from '../../../../api/upload';

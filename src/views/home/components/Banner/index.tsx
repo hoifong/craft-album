@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { Photo } from '../../../../api/types';
 import styles from './index.module.sass';
-import Image from '../Image';
+import Image from '../../containers/Image';
 import AddPhoto from '../../containers/AddPhoto';
 import cn from 'classnames';
 // import { BANNER_SLIDE_SPEED } from '../../../../utils/consts';

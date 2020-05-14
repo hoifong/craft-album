@@ -1,13 +1,18 @@
+/**
+ * 组件：Banner的单个图片元素
+ */
 import React, { useState } from 'react';
 import cn from 'classnames';
-import { Photo } from '../../../../api/types';
+import { Photo, payloadForUpdateText } from '../../../../api/types';
 import styles from './index.module.sass';
 import { QINIU_DOMAIN } from '../../../../utils/consts';
+import FlexTextarea from '../FlexTextarea';
 
-interface ImageProps {
+export interface ImageProps {
     photo: Photo
     showText?: boolean
     onClick?: () => void
+    onTextEditComplete?: (payload: payloadForUpdateText) => void
 }
 
 /**
@@ -15,8 +20,10 @@ interface ImageProps {
  */
 
 const Image: React.FC<ImageProps> = props => {
-    const { showText, onClick, photo } = props;
+    const { showText, onClick, photo, onTextEditComplete } = props;
     const [opacity, setOpacity] = useState(0);
+    const [editFocus, setEditFocus] = useState(false);
+    const [newText, setNewText] = useState(photo.text || '');
 
     const dispear = (endCb: () => void) => {
         let value = 1;
@@ -52,6 +59,16 @@ const Image: React.FC<ImageProps> = props => {
 
     const handleClick = () => {
         if (showText) {
+            //  如果正在编辑文本
+            if (editFocus) {
+                setEditFocus(false);
+
+                newText !== photo.text && onTextEditComplete && onTextEditComplete({
+                    photoId: photo.photoId,
+                    text: newText
+                });
+                return
+            }
             //  消失
             onClick && dispear(onClick);
         } else if (onClick) {
@@ -70,7 +87,10 @@ const Image: React.FC<ImageProps> = props => {
                 <img src={src} alt={photo.text}/>
             </div>
             <div style={{ opacity }} className={ cn(styles.mask, (!showText) && styles.dispear) }>
-                <h3 className={styles.text}>{photo.text}</h3>
+                <FlexTextarea
+                    value={photo.text}
+                    onChange={setNewText}
+                    onFocus={() => setEditFocus(true)}/>
             </div>
         </div>
     );
