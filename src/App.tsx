@@ -9,7 +9,9 @@ import { Provider } from 'react-redux';
 import ControllerLoading from './containers/Loading';
 import Toast from './containers/Toast';
 
-const store = createStore(Reducer, applyMiddleware(thunk, logger));
+const store = createStore(Reducer,
+  process.env.NODE_ENV === 'production' ? undefined : applyMiddleware(thunk, logger)
+);
 
 const App: React.FC = () => {
   return (

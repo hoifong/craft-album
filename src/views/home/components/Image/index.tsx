@@ -1,7 +1,7 @@
 /**
  * 组件：Banner的单个图片元素
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
 import { Photo, payloadForUpdateText } from '../../../../api/types';
 import styles from './index.module.sass';
@@ -63,6 +63,8 @@ const Image: React.FC<ImageProps> = props => {
             if (editFocus) {
                 setEditFocus(false);
 
+                console.log(newText, photo.text);
+
                 newText !== photo.text && onTextEditComplete && onTextEditComplete({
                     photoId: photo.photoId,
                     text: newText
@@ -77,6 +79,10 @@ const Image: React.FC<ImageProps> = props => {
             showup();
         }
     };
+
+    useEffect(() => {
+        setNewText(photo.text);
+    }, [photo]);
 
     const src = 'http://' + QINIU_DOMAIN + '/' + photo.photoId;
 
