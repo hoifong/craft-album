@@ -10,7 +10,7 @@ import ControllerLoading from './containers/Loading';
 import Toast from './containers/Toast';
 
 const store = createStore(Reducer,
-  process.env.NODE_ENV === 'production' ? undefined : applyMiddleware(thunk, logger)
+  process.env.NODE_ENV === 'production' ? applyMiddleware(thunk) : applyMiddleware(thunk, logger)
 );
 
 const App: React.FC = () => {
