@@ -4,8 +4,21 @@
     top: 0
     width: 100vw
     height: 100vh
-    background-color: rgba(255, 255, 255, 0.5)
+    background-color: white
+    justify-content: center
+    align-items: center
     z-index: 2000
+    opacity: 1
+    transition: opacity .6s ease-in-out
+
+.show
+    opacity: 1
+
+.hide
+    opacity: 0
+
+.none
+    display: none
 
 .loadingSpin
     width: 100px
@@ -16,9 +29,6 @@
     margin-top: -50px
     margin-left: -50px
     box-sizing: border-box
-    border-radius: 50%
-    border-top: 5px solid white
-    border-bottom: 5px solid white
     animation: spin 2s ease-in-out infinite
     overflow: visible
 

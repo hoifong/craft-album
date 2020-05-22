@@ -18,6 +18,7 @@ const App: React.FC = () => {
     <Provider store={store}>
         <div className="App">
           <ControllerLoading />
+          {/* <Loading show={true}/> */}
           <Toast />
           <Home />
         </div>

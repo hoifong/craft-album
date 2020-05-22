@@ -19,7 +19,7 @@ export const toggleLoading: ActionCreator<BaseAction> = () => ({
     type: ACTION_TYPES.TOGGLE_LOADING
 });
 
-export const loadingReducer: Reducer<LoadingState, ActionType> = (state = false, action) => {
+export const loadingReducer: Reducer<LoadingState, ActionType> = (state = true, action) => {
     switch(action.type) {
         case ACTION_TYPES.TOGGLE_LOADING:
             //  忽略action中的show值
