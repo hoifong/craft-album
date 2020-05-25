@@ -17,3 +17,7 @@ export const QINIU_DOMAIN = 'craft-album.4um.cn';
 
 export const HIDE_CONTROLLER_IN_SECONDS = 2;
 export const HIDE_TOAST_IN_SECONDS = 2;
+
+export const QUERYS_DEFINE = {
+    PAGE: 'page'
+}

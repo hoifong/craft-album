@@ -146,11 +146,11 @@ const Banner: React.FC<BannerProps> = props => {
         <div className={styles.banner}>
             <div className={containerStyle}>
                 <section>
-                    { current > 0 && <Image showText={false} photo={photos[left !== -1 ? left : (current - 1)]} /> }
+                    { current > 0 && current <= photos.length && <Image showText={false} photo={photos[left !== -1 ? left : (current - 1)]} /> }
                 </section>
                 <section>
                     {
-                        current !== photos.length
+                        current < photos.length
                             ? <Image onClick={() => dispatch({type: 'toggleTextVisible'})} showText={textVisible} photo={photos[current]} />
                             : <AddPhoto  bgUrl={lastPhoto} />
                     }

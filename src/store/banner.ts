@@ -6,6 +6,8 @@ import { ThunkAction } from 'redux-thunk';
 import { initUploader } from './uploader';
 import { showLoading, hideLoading } from './loading';
 import { toast } from './toast';
+import { getUrlQuery } from '../utils/helper';
+import { QUERYS_DEFINE } from '../utils/consts';
 
 export interface BannerState {
     photos: Photo[],
@@ -19,7 +21,7 @@ interface ActionType extends BaseAction {
 }
 
 const initValue: BannerState = {
-    showIndex: 0,
+    showIndex: Math.max(parseInt(getUrlQuery(QUERYS_DEFINE.PAGE)), 1) - 1,
     photos: []
 }
 
@@ -87,6 +89,7 @@ export const slideTo: ActionCreator<ActionType> = (index: number) => ({
  * reducer
  */
 export const bannerReducer: Reducer<BannerState, ActionType> = (state = initValue, action) => {
+    console.log(state);
     switch(action.type) {
         case ACTION_TYPES.GET_PHOTOS:
             const photos = (action.photos || []).filter(item => item.uploaded); //确保能访问到资源

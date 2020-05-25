@@ -1,11 +1,15 @@
+import thunk from 'redux-thunk';
+import logger from 'redux-logger';
+
 import { userReducer, UserState } from './user';
-import { combineReducers } from 'redux';
+import { combineReducers, createStore, applyMiddleware, Middleware } from 'redux';
 import { BannerState, bannerReducer } from './banner';
 import { UploaderState, uploaderReducer } from './uploader';
 import { LoadingState, loadingReducer } from './loading';
 import { ToastState, toastReducer } from './toast';
 import { LoginboxState, LoginboxReducer } from './loginbox';
 import { ControllerState, ControllerReducer } from './controller';
+import queryCache from '../middlewares/queryCache';
 
 export interface StoreState {
     user: UserState
@@ -27,4 +31,15 @@ const rootReducer = combineReducers({
     controller: ControllerReducer
 });
 
-export default rootReducer;
+const middlewares: Middleware[] = [
+    thunk, queryCache
+];
+
+process.env.NODE_ENV !== 'production' && middlewares.push(logger);
+
+const store = createStore(
+    rootReducer,
+    applyMiddleware(...middlewares)
+  );
+
+export default store;
